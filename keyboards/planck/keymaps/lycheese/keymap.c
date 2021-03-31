@@ -66,10 +66,6 @@ td_state_t cur_dance(qk_tap_dance_state_t *state);
 void x_finished(qk_tap_dance_state_t *state, void *user_data);
 void x_reset(qk_tap_dance_state_t *state, void *user_data);
 
-/* qk_tap_dance_action_t tap_dance_actions[] = { */
-/*   [TD_QUOT_BKSL] = ACTION_ */
-/* }; */
-
 #define LOWER MO(_LOWER)
 #define RAISE MO(_RAISE)
 
@@ -457,6 +453,7 @@ void x_finished(qk_tap_dance_state_t *state, void *user_data) {
         // For example, when typing the word `buffer`, and you want to make sure that you send `ff` and not `Esc`.
         // In order to type `ff` when typing fast, the next character will have to be hit within the `TAPPING_TERM`, which by default is 200ms.
         case TD_DOUBLE_SINGLE_TAP: tap_code(KC_X); register_code(KC_X);
+        default: break;
     }
 }
 
@@ -467,6 +464,7 @@ void x_reset(qk_tap_dance_state_t *state, void *user_data) {
         case TD_DOUBLE_TAP: unregister_code(KC_ESC); break;
         case TD_DOUBLE_HOLD: unregister_code(KC_LALT);
         case TD_DOUBLE_SINGLE_TAP: unregister_code(KC_X);
+        default: break;
     }
     xtap_state.state = TD_NONE;
 }
@@ -480,6 +478,7 @@ void quot_bksl_finished(qk_tap_dance_state_t *state, void *user_data) {
         // For example, when typing the word `buffer`, and you want to make sure that you send `ff` and not `Esc`.
         // In order to type `ff` when typing fast, the next character will have to be hit within the `TAPPING_TERM`, which by default is 200ms.
         case TD_DOUBLE_SINGLE_TAP: tap_code(KC_QUOT); register_code(KC_QUOT);
+        default: break;
     }
 }
 
@@ -488,6 +487,7 @@ void quot_bksl_reset(qk_tap_dance_state_t *state, void *user_data) {
         case TD_SINGLE_TAP: unregister_code(KC_QUOT); break;
         case TD_SINGLE_HOLD: unregister_code(KC_BSLS); break;
         case TD_DOUBLE_SINGLE_TAP: unregister_code(KC_QUOT);
+        default: break;
     }
     xtap_state.state = TD_NONE;
 }
