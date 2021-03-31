@@ -475,7 +475,7 @@ void quot_bksl_finished(qk_tap_dance_state_t *state, void *user_data) {
     xtap_state.state = cur_dance(state);
     switch (xtap_state.state) {
         case TD_SINGLE_TAP: register_code(KC_QUOT); break;
-        case TD_SINGLE_HOLD: register_code(KC_BKSL); break;
+        case TD_SINGLE_HOLD: register_code(KC_BSLS); break;
         // Last case is for fast typing. Assuming your key is `f`:
         // For example, when typing the word `buffer`, and you want to make sure that you send `ff` and not `Esc`.
         // In order to type `ff` when typing fast, the next character will have to be hit within the `TAPPING_TERM`, which by default is 200ms.
@@ -486,7 +486,7 @@ void quot_bksl_finished(qk_tap_dance_state_t *state, void *user_data) {
 void quot_bksl_reset(qk_tap_dance_state_t *state, void *user_data) {
     switch (xtap_state.state) {
         case TD_SINGLE_TAP: unregister_code(KC_QUOT); break;
-        case TD_SINGLE_HOLD: unregister_code(KC_BKSL); break;
+        case TD_SINGLE_HOLD: unregister_code(KC_BSLS); break;
         case TD_DOUBLE_SINGLE_TAP: unregister_code(KC_QUOT);
     }
     xtap_state.state = TD_NONE;
