@@ -54,6 +54,7 @@ typedef struct {
 enum {
     X_CTL,
     TD_QUOT_BKSL,
+    TD_RALT_SHIFT,
 };
 
 td_state_t cur_dance(qk_tap_dance_state_t *state);
@@ -62,7 +63,10 @@ td_state_t cur_dance(qk_tap_dance_state_t *state);
 void x_finished(qk_tap_dance_state_t *state, void *user_data);
 void x_reset(qk_tap_dance_state_t *state, void *user_data);
 
-#define RALTP LM(_RALT_OVERLAY, MOD_RALT)
+void ralt_shift_finished(qk_tap_dance_state_t *state, void *user_data);
+void ralt_shift_reset(qk_tap_dance_state_t *state, void *user_data);
+
+#define RALTP MO(_RALT_OVERLAY)
 #define RALT_SH MO(_RALT_SHIFT)
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -87,14 +91,14 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     KC_TAB,  KC_Q,    KC_W,     KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,  KC_I,    KC_O,    KC_P,    KC_LBRC,
     KC_CAPS, KC_A,    KC_S,     KC_D,    KC_F,    KC_G,    KC_H,    KC_J,  KC_K,    KC_L,    KC_SCLN, KC_QUOT,
     KC_LSFT, KC_Z,    KC_X,     KC_C,    KC_V,    KC_B,    KC_N,    KC_M,  KC_COMM, KC_DOT,  KC_SLSH, KC_RSFT,
-    KC_NUBS, KC_LEFT, KC_RIGHT, KC_LCTL, KC_LALT, KC_SPC,  KC_SPC,  RALTP, KC_LGUI, KC_DOWN, KC_UP,   KC_BSLS
+    KC_NUBS, KC_LEFT, KC_RIGHT, KC_LCTL, KC_LALT, KC_SPC,  KC_SPC,  TD(TD_RALT_SHIFT), KC_LGUI, KC_DOWN, KC_UP,   KC_BSLS
 ),
 
 [_RALT_OVERLAY] = LAYOUT_planck_grid(
     _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
     _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
     RALT_SH, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
-    _______, _______, _______, _______, _______, _______, _______, KC_RALT, _______, _______, _______, _______
+    _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______
 ),
 
 [_RALT_SHIFT] = LAYOUT_planck_grid(
@@ -196,6 +200,30 @@ void x_reset(qk_tap_dance_state_t *state, void *user_data) {
     xtap_state.state = TD_NONE;
 }
 
+void ralt_shift_finished(qk_tap_dance_state_t *state, void *user_data) {
+    xtap_state.state = cur_dance(state);
+    switch (xtap_state.state) {
+        case TD_SINGLE_TAP: register_code(KC_RALT); break;
+        case TD_SINGLE_HOLD: register_code(KC_RALT); break;
+        case TD_DOUBLE_HOLD: unregister_code(RALTP);
+        // Last case is for fast typing. Assuming your key is `f`:
+        // For example, when typing the word `buffer`, and you want to make sure that you send `ff` and not `Esc`.
+        // In order to type `ff` when typing fast, the next character will have to be hit within the `TAPPING_TERM`, which by default is 200ms.
+        case TD_DOUBLE_SINGLE_TAP: tap_code(KC_QUOT); register_code(KC_QUOT);
+        default: break;
+    }
+}
+
+void ralt_shift_reset(qk_tap_dance_state_t *state, void *user_data) {
+    switch (xtap_state.state) {
+        case TD_SINGLE_TAP: unregister_code(KC_RALT); break;
+        case TD_SINGLE_HOLD: unregister_code(KC_RALT); break;
+        case TD_DOUBLE_SINGLE_TAP: unregister_code(KC_RALT);
+        default: break;
+    }
+    xtap_state.state = TD_NONE;
+}
+
 void quot_bksl_finished(qk_tap_dance_state_t *state, void *user_data) {
     xtap_state.state = cur_dance(state);
     switch (xtap_state.state) {
@@ -222,4 +250,5 @@ void quot_bksl_reset(qk_tap_dance_state_t *state, void *user_data) {
 qk_tap_dance_action_t tap_dance_actions[] = {
     [X_CTL] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, x_finished, x_reset),
     [TD_QUOT_BKSL] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, quot_bksl_finished, quot_bksl_reset),
+    [TD_RALT_SHIFT] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, ralt_shift_finished, ralt_shift_reset),
 };
