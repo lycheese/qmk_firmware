@@ -91,7 +91,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     KC_TAB,  KC_Q,    KC_W,     KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,  KC_I,    KC_O,    KC_P,    KC_LBRC,
     KC_CAPS, KC_A,    KC_S,     KC_D,    KC_F,    KC_G,    KC_H,    KC_J,  KC_K,    KC_L,    KC_SCLN, KC_QUOT,
     KC_LSFT, KC_Z,    KC_X,     KC_C,    KC_V,    KC_B,    KC_N,    KC_M,  KC_COMM, KC_DOT,  KC_SLSH, KC_RSFT,
-    KC_NUBS, KC_LEFT, KC_RIGHT, KC_LCTL, KC_LALT, KC_SPC,  KC_SPC,  TD(TD_RALT_SHIFT), KC_LGUI, KC_DOWN, KC_UP,   KC_BSLS
+    KC_NUBS, KC_LEFT, KC_RIGHT, KC_LCTL, KC_LALT, KC_SPC,  KC_SPC,  KC_RALT, KC_LGUI, KC_DOWN, KC_UP,   KC_BSLS
 ),
 
 [_RALT_OVERLAY] = LAYOUT_planck_grid(
@@ -205,7 +205,7 @@ void ralt_shift_finished(qk_tap_dance_state_t *state, void *user_data) {
     switch (xtap_state.state) {
         case TD_SINGLE_TAP: register_code(KC_RALT); break;
         case TD_SINGLE_HOLD: register_code(KC_RALT); break;
-        case TD_DOUBLE_HOLD: unregister_code(RALTP);
+        case TD_DOUBLE_HOLD: unregister_code(KC_RALT); // Should be a layer switch but that doesn't work here
         // Last case is for fast typing. Assuming your key is `f`:
         // For example, when typing the word `buffer`, and you want to make sure that you send `ff` and not `Esc`.
         // In order to type `ff` when typing fast, the next character will have to be hit within the `TAPPING_TERM`, which by default is 200ms.
