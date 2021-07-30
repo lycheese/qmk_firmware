@@ -14,13 +14,18 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include QMK_KEYBOARD_H
+#include "keymap_steno.h"
 
 enum layers {
     _QWERTY = 0,
     _LOWER,
     _RAISE,
-    _ADJUST
+    _ADJUST,
+    _PLOVER
 };
+
+#define STN_BOLT QK_STENO_BOLT
+#define STN_GEM  QK_STENO_GEMINI
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 /*
@@ -31,7 +36,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |--------+------+------+------+------+------|                              |------+------+------+------+------+--------|
  * | Caps   |   A  |   S  |   D  |   F  |   G  |                              |   H  |   J  |   K  |   L  | ;  : |  ' "   |
  * |--------+------+------+------+------+------+-------------.  ,-------------+------+------+------+------+------+--------|
- * | LShift |   Z  |   X  |   C  |   V  |   B  |LOWER |LShift|  |LShift|LShift|   N  |   M  | ,  < | . >  | /  ? | RShift |
+ * | LShift |   Z  |   X  |   C  |   V  |   B  |LOWER |SCLK  |  |LShift|PLOVER|   N  |   M  | ,  < | . >  | /  ? | RShift |
  * `----------------------+------+------+------+------+------|  |------+------+------+------+------+----------------------'
  *                        | RAIS | Del  | Mod3 | Space| Esc  |  | Enter| Space| Mod3 | Bksp | RAIS |
  *                        |      |      |      | Mod4 |      |  |      | Mod4 |      |      |      |
@@ -40,7 +45,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [_QWERTY] = LAYOUT(
       MO(_ADJUST),          KC_Q,           KC_W,           KC_E,            KC_R,           KC_T,                                                                                                      KC_Y,    KC_U,      KC_I,    KC_O,   KC_P,    KC_LBRC,
       KC_CAPS           ,   LGUI_T(KC_A),   LALT_T(KC_S),   LCTL_T(KC_D),    LSFT_T(KC_F),   KC_G,                                                                                   KC_H,    RSFT_T(KC_J), RCTL_T(KC_K), LALT_T(KC_L), RGUI_T(KC_SCLN), KC_QUOT,
-      KC_LSFT           ,   KC_Z,           KC_X,           KC_C,            KC_V,           KC_B,           TG(_LOWER),     KC_LSFT,                                KC_LSFT,            KC_LSFT,            KC_N,    KC_M,      KC_COMM, KC_DOT, KC_SLSH, KC_RSFT,
+      KC_LSFT           ,   KC_Z,           KC_X,           KC_C,            KC_V,           KC_B,           TG(_LOWER),     KC_SLCK,                                KC_LSFT,            TG(_PLOVER),            KC_N,    KC_M,      KC_COMM, KC_DOT, KC_SLSH, KC_RSFT,
                                                             MO(_RAISE),      KC_DEL,         KC_CAPS,        RALT_T(KC_SPC), KC_ESC,        KC_ENT, RALT_T(KC_SPC), KC_BSLS,  KC_BSPC, MO(_RAISE)
     ),
 /*
@@ -103,6 +108,27 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
       _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, KC_F1,   KC_F2,   KC_F3,  KC_F12, _______,
                                  _______, _______, _______, _______, _______, _______, _______, _______, _______, _______
     ),
+/*
+ * Layer template
+ *
+ * ,-------------------------------------------.                              ,-------------------------------------------.
+ * |        |      |      |      |      |      |                              |      |      |      |      |      |        |
+ * |--------+------+------+------+------+------|                              |------+------+------+------+------+--------|
+ * |        |      |      |      |      |      |                              |      |      |      |      |      |        |
+ * |--------+------+------+------+------+------+-------------.  ,-------------+------+------+------+------+------+--------|
+ * |        |      |      |      |      |      |      |      |  |      |      |      |      |      |      |      |        |
+ * `----------------------+------+------+------+------+------|  |------+------+------+------+------+----------------------'
+ *                        |      |      |      |      |      |  |      |      |      |      |      |
+ *                        |      |      |      |      |      |  |      |      |      |      |      |
+ *                        `----------------------------------'  `----------------------------------'
+ */
+    [_PLOVER] = LAYOUT(
+      STN_N1,  STN_N2,  STN_N3,  STN_N4,  STN_N5,  STN_N6,                                           STN_N7,  STN_N8,  STN_N9,  STN_NA,  STN_NB,  STN_NC,
+      STN_FN,  STN_S1,  STN_TL,  STN_PL,  STN_HL,  STN_ST1,                                          STN_ST3, STN_FR,  STN_PR,  STN_LR,  STN_TR,  STN_DR,
+      KC_SLCK, STN_S2,  STN_KL,  STN_WL,  STN_RL,  STN_ST2, STN_PWR, STN_BOLT, STN_GEM, TG(_PLOVER), STN_ST4, STN_RR,  STN_BR,  STN_GR,  STN_SR,  STN_ZR,
+                                 STN_RE1, _______, STN_A,   STN_O,   _______,  _______, STN_E,       STN_U,   _______, STN_RE2
+    ),
+
 // /*
 //  * Layer template
 //  *
@@ -124,6 +150,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 //                                  _______, _______, _______, _______, _______, _______, _______, _______, _______, _______
 //     ),
 };
+
+/* void matrix_init_user() { */
+/*     steno_set_mode(STENO_MODE_GEMINI); */
+/* } */
 
 layer_state_t layer_state_set_user(layer_state_t state) {
     return update_tri_layer_state(state, _LOWER, _RAISE, _ADJUST);
