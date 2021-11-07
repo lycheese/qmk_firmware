@@ -34,3 +34,7 @@
 
 #define IGNORE_MOD_TAP_INTERRUPT
 #define TAPPING_TERM 150
+
+// Fix annoying behaviour of the space key when used as mod-tap for layer 4 of
+// bone (repeating spaces instead of layer 4)
+#define TAPPING_FORCE_HOLD_PER_KEY
