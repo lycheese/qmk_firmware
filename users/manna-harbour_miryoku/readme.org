@@ -145,7 +145,7 @@ available.
 
 #+NAME: nav-r
 | U_RDO | U_PST | U_CPY | U_CUT | U_UND |
-| CAPS  | LEFT  | DOWN  | UP    | RGHT  |
+| LEFT  | DOWN  | UP    | RGHT  | CAPS  |
 | INS   | HOME  | PGDN  | PGUP  | END   |
 | ENT   | BSPC  | DEL   | U_NP  | U_NP  |
 
