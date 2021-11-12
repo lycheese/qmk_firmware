@@ -224,10 +224,10 @@ chording when using mods with shifted symbols.  Open parenthesis is duplicated
 next to close parenthesis.
 
 #+NAME: sym-l
-| {    | &    | *    | (    | }    |
-| :    | $    | %    | ^    | +    |
-| ~    | !    | @    | #    | PIPE |
-| U_NP | U_NP | (    | )    | _    |
+| {    | &    | * | ( | }    |
+| :    | $    | % | ^ | +    |
+| ~    | !    | @ | # | PIPE |
+| U_NP | U_NP | ) | ( | _    |
 
 
 **** Fun
