@@ -23,19 +23,20 @@ enum layers {
     _SYM,
     _FUN,
     _NAV,
-    _MEDIA
+    _MEDIA,
+    _SYMR
 };
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 /*
- * Base Layer: QWERTY
+ * Bone layer
  *
  * ,-------------------------------------------.                              ,-------------------------------------------.
- * | FN     |   J  |   D  |   U  |   A  |   X  |                              |   P  |   H  |   L  |   M  |   W  |  ẞ     |
+ * |        |   J  |   D  |   U  |   A  |   X  |                              |   P  |   H  |   L  |   M  |   W  |  ẞ     |
  * |--------+------+------+------+------+------|                              |------+------+------+------+------+--------|
- * | Caps   |   C  |   T  |   I  |   E  |   O  |                              |   B  |   N  |   R  |   S  |   G  |  Q     |
+ * |        |   C  |   T  |   I  |   E  |   O  |                              |   B  |   N  |   R  |   S  |   G  |  Q     |
  * |--------+------+------+------+------+------+-------------.  ,-------------+------+------+------+------+------+--------|
- * | LShift |   F  |   V  |   Ü  |   Ä  |   Ö  | GAME |SCLK  |  |LShift|PLOVER|   Y  |   Z  |   ,  |   .  |   K  | RShift |
+ * |        |   F  |   V  |   Ü  |   Ä  |   Ö  | GAME |QWERTY|  |COLEMK|      |   Y  |   Z  |   ,  |   .  |   K  |        |
  * `----------------------+------+------+------+------+------|  |------+------+------+------+------+----------------------'
  *                        |      | ESC  | SPC  | TAB  |      |  |      | RET  | BSPC | DEL  |      |
  *                        |      |      |      |      |      |  |      |      |      |      |      |
@@ -45,8 +46,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
       XXXXXXX,          KC_J,           KC_D,           KC_U,            KC_A,           KC_X,                                                                                               KC_P,    KC_H,         KC_L,         KC_M,         KC_W,            RALT(KC_S),
       XXXXXXX,          LGUI_T(KC_C),   LALT_T(KC_T),   LCTL_T(KC_I),    LSFT_T(KC_E),   KC_O,                                                                                               KC_B,    RSFT_T(KC_N), RCTL_T(KC_R), LALT_T(KC_S), RGUI_T(KC_G),    KC_Q,
       XXXXXXX,          KC_F,           KC_V,           RALT(KC_U),      RALT(KC_A),     RALT(KC_O),       TG(_GAME),     KC_SLCK,                                KC_LSFT, XXXXXXX,          KC_Y,    KC_Z,         KC_COMM,      KC_DOT,       KC_K,            XXXXXXX,
-                                                        XXXXXXX,  LT(_MEDIA, KC_ESC), LT(_NAV, KC_SPC),    KC_TAB,        XXXXXXX,                                XXXXXXX, LT(_SYM, KC_ENT), LT(_NUM, KC_BSPC),     LT(_FUN, KC_DEL),       XXXXXXX
+                                                        XXXXXXX, LT(_MEDIA, KC_ESC), LT(_NAV, KC_SPC), LT(_SYMR, KC_TAB), XXXXXXX,                                XXXXXXX, LT(_SYM, KC_ENT), LT(_NUM, KC_BSPC),     LT(_FUN, KC_DEL),       XXXXXXX
     ),
+
 /*
  * Lower Layer: Gaming
  *
@@ -71,9 +73,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * Number layer
  *
  * ,-------------------------------------------.                              ,-------------------------------------------.
- * |        |  [   |  7   |  8   |  9   |  ]   |                              |      |      |      |      |      |        |
+ * |  '     |  [   |  7   |  8   |  9   |  ]   |                              |      |      |      |      |      |        |
  * |--------+------+------+------+------+------|                              |------+------+------+------+------+--------|
- * |        |  ;   |  4   |  5   |  6   |  =   |                              |      | LSFT | LCTL | LALT | LGUI |        |
+ * |  /     |  ;   |  4   |  5   |  6   |  =   |                              |      | LSFT | LCTL | LALT | LGUI |        |
  * |--------+------+------+------+------+------+-------------.  ,-------------+------+------+------+------+------+--------|
  * |        |  `   |  1   |  2   |  3   |  \   |      |      |  |      |      |      |      |      |      |      |        |
  * `----------------------+------+------+------+------+------|  |------+------+------+------+------+----------------------'
@@ -82,8 +84,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  *                        `----------------------------------'  `----------------------------------'
  */
     [_NUM] = LAYOUT(
-      XXXXXXX, KC_LBRC, KC_7,    KC_8,    KC_9,    KC_RBRC,                                     XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
-      XXXXXXX, KC_SCLN, KC_4,    KC_5,    KC_6,    KC_EQL,                                      XXXXXXX, KC_LSFT, KC_LCTL, KC_LALT, KC_LGUI, XXXXXXX,
+      KC_QUOT, KC_LBRC, KC_7,    KC_8,    KC_9,    KC_RBRC,                                     XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+      KC_SLSH, KC_SCLN, KC_4,    KC_5,    KC_6,    KC_EQL,                                      XXXXXXX, KC_LSFT, KC_LCTL, KC_LALT, KC_LGUI, XXXXXXX,
       XXXXXXX, KC_GRV,  KC_1,    KC_2,    KC_3,    KC_BSLS, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
                                  XXXXXXX, KC_DOT,  KC_0,    KC_MINS, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX
     ),
@@ -92,9 +94,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * Symbol layer
  *
  * ,-------------------------------------------.                              ,-------------------------------------------.
- * |        |  {   |  &   |  *   |  (   |  }   |                              |      |      |      |      |      |        |
+ * |  "     |  {   |  &   |  *   |  (   |  }   |                              |      |      |      |      |      |        |
  * |--------+------+------+------+------+------|                              |------+------+------+------+------+--------|
- * |        |  :   |  $   |  %   |  ^   |  +   |                              |      | LSFT | LCTL | LALT | LGUI |        |
+ * |  ?     |  :   |  $   |  %   |  ^   |  +   |                              |      | LSFT | LCTL | LALT | LGUI |        |
  * |--------+------+------+------+------+------+-------------.  ,-------------+------+------+------+------+------+--------|
  * |        |  ~   |  !   |  @   |  #   |  |   |      |      |  |      |      |      |      |      |      |      |        |
  * `----------------------+------+------+------+------+------|  |------+------+------+------+------+----------------------'
@@ -103,10 +105,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  *                        `----------------------------------'  `----------------------------------'
  */
     [_SYM] = LAYOUT(
-      XXXXXXX, KC_LCBR, KC_AMPR, KC_ASTR, KC_LPRN, KC_RCBR,                                     XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
-      XXXXXXX, KC_COLN, KC_DLR,  KC_PERC, KC_CIRC, KC_PLUS,                                     XXXXXXX, KC_LSFT, KC_LCTL, KC_LALT, KC_LGUI, XXXXXXX,
-      XXXXXXX, KC_TILD, KC_EXLM, KC_AT,   KC_HASH, KC_PIPE, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
-                                 XXXXXXX, KC_LPRN, KC_RPRN, KC_UNDS, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX
+      XXXXXXX, XXXXXXX, KC_UNDS, KC_LBRC, KC_RBRC, KC_CIRC,                                     XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+      XXXXXXX, KC_BSLS, KC_SLSH, KC_LCBR, KC_RCBR, KC_ASTR,                                     XXXXXXX, KC_LSFT, KC_LCTL, KC_LALT, KC_LGUI, XXXXXXX,
+      XXXXXXX, KC_HASH, KC_DLR,  KC_PIPE, KC_TILD, KC_GRV,  XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+                                 XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX
     ),
 
 /*
@@ -170,6 +172,28 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
       XXXXXXX, KC_LGUI, KC_LALT, KC_LCTL, KC_LSFT, XXXXXXX,                                     XXXXXXX, XXXXXXX, KC_VOLD, KC_VOLU, XXXXXXX, XXXXXXX,
       XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
                                  XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_MUTE, XXXXXXX
+    ),
+
+
+/*
+ * Media layer
+ *
+ * ,-------------------------------------------.                              ,-------------------------------------------.
+ * |        |      |      |      |      |      |                              |      |      |      |      |      |        |
+ * |--------+------+------+------+------+------|                              |------+------+------+------+------+--------|
+ * |        |      |      |      |      |      |                              |      |      |      |      |      |        |
+ * |--------+------+------+------+------+------+-------------.  ,-------------+------+------+------+------+------+--------|
+ * |        |      |      |      |      |      |      |      |  |      |      |      |      |      |      |      |        |
+ * `----------------------+------+------+------+------+------|  |------+------+------+------+------+----------------------'
+ *                        |      |      |      |      |      |  |      |      |      |      |      |
+ *                        |      |      |      |      |      |  |      |      |      |      |      |
+ *                        `----------------------------------'  `----------------------------------'
+ */
+    [_SYMR] = LAYOUT(
+      XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                                     KC_EXLM, KC_LT,   KC_GT,   KC_EQL,  KC_AMPR, XXXXXXX,
+      XXXXXXX, KC_LGUI, KC_LALT, KC_LCTL, KC_LSFT, XXXXXXX,                                     KC_QUES, KC_LPRN, KC_RPRN, KC_MINS, KC_COLN, KC_AT,
+      XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_PLUS, KC_PERC, KC_DQUO, KC_QUOT, KC_SCLN, XXXXXXX,
+                                 XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX
     ),
 
 // /*
