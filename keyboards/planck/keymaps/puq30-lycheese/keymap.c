@@ -230,3 +230,13 @@ combo_t key_combos[COMBO_COUNT] = {
   COMBO(test_combo5, OSM(MOD_LCTL)),
   COMBO(test_combo6, OSM(MOD_LSFT)),
 };
+
+const key_override_t german_dot_override = ko_make_basic(MOD_MASK_SHIFT, KC_DOT, KC_COLN);
+const key_override_t german_comm_override = ko_make_basic(MOD_MASK_SHIFT, KC_COMM, KC_SCLN);
+
+
+const key_override_t **key_overrides = (const key_override_t *[]){
+    &german_dot_override,
+    &german_comm_override,
+    NULL // Null terminate the array of overrides!
+};
