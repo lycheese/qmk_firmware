@@ -214,3 +214,19 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       return true;
   }
 }
+
+const uint16_t PROGMEM test_combo1[] = {HRM_A, HRM_E, COMBO_END};
+const uint16_t PROGMEM test_combo2[] = {HRM_A, HRM_I, COMBO_END};
+const uint16_t PROGMEM test_combo3[] = {HRM_E, HRM_I, COMBO_END};
+const uint16_t PROGMEM test_combo4[] = {HRM_R, HRM_N, COMBO_END};
+const uint16_t PROGMEM test_combo5[] = {HRM_T, HRM_N, COMBO_END};
+const uint16_t PROGMEM test_combo6[] = {HRM_T, HRM_R, COMBO_END};
+
+combo_t key_combos[COMBO_COUNT] = {
+  COMBO(test_combo1, OSM(MOD_LSFT)),
+  COMBO(test_combo2, OSM(MOD_LCTL)),
+  COMBO(test_combo3, OSM(MOD_LALT)),
+  COMBO(test_combo4, OSM(MOD_LALT)),
+  COMBO(test_combo5, OSM(MOD_LCTL)),
+  COMBO(test_combo6, OSM(MOD_LSFT)),
+};
