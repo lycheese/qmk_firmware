@@ -54,7 +54,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 [_PUQ] = LAYOUT_planck_grid(
     KC_P,    KC_U,    DIA,     KC_COMM, KC_Q,    KC_NO,    KC_NO,    KC_G,    KC_C,    KC_L,    KC_M,    KC_F,
     HRM_H,   HRM_I,   HRM_E,   HRM_A,   KC_O,    KC_NO,    KC_NO,    KC_D,    HRM_T,   HRM_R,   HRM_N,   HRM_S,
-    KC_K,    KC_Y,    KC_DOT,  KC_QUOT, KC_X,    KC_NO,    KC_NO,    KC_J,    KC_V,    KC_W,    KC_B,    KC_Z,
+    KC_K,    KC_Y,    KC_DOT,  KC_SLSH, KC_X,    KC_NO,    KC_NO,    KC_J,    KC_V,    KC_W,    KC_B,    KC_Z,
     KC_NO,   KC_NO,   ESC,     SPC,     TAB,     KC_NO,    KC_NO,    RET,     BSP,     DEL,     KC_NO,   KC_NO
 ),
 
