@@ -215,25 +215,20 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   }
 }
 
-const uint16_t PROGMEM test_combo1[] = {HRM_A, HRM_E, COMBO_END};
-const uint16_t PROGMEM test_combo2[] = {HRM_A, HRM_I, COMBO_END};
-const uint16_t PROGMEM test_combo3[] = {HRM_E, HRM_I, COMBO_END};
-const uint16_t PROGMEM test_combo4[] = {HRM_R, HRM_N, COMBO_END};
-const uint16_t PROGMEM test_combo5[] = {HRM_T, HRM_N, COMBO_END};
-const uint16_t PROGMEM test_combo6[] = {HRM_T, HRM_R, COMBO_END};
+const uint16_t PROGMEM test_combo1[] = {HRM_A, HRM_T, COMBO_END};
+const uint16_t PROGMEM test_combo2[] = {HRM_E, HRM_R, COMBO_END};
+const uint16_t PROGMEM test_combo3[] = {HRM_I, HRM_N, COMBO_END};
+const uint16_t PROGMEM test_combo7[] = {HRM_H, HRM_S, COMBO_END};
 
 combo_t key_combos[COMBO_COUNT] = {
   COMBO(test_combo1, OSM(MOD_LSFT)),
   COMBO(test_combo2, OSM(MOD_LCTL)),
   COMBO(test_combo3, OSM(MOD_LALT)),
-  COMBO(test_combo4, OSM(MOD_LALT)),
-  COMBO(test_combo5, OSM(MOD_LCTL)),
-  COMBO(test_combo6, OSM(MOD_LSFT)),
+  COMBO(test_combo7, CAPS_WORD),
 };
 
 const key_override_t german_dot_override = ko_make_basic(MOD_MASK_SHIFT, KC_DOT, KC_COLN);
 const key_override_t german_comm_override = ko_make_basic(MOD_MASK_SHIFT, KC_COMM, KC_SCLN);
-
 
 const key_override_t **key_overrides = (const key_override_t *[]){
     &german_dot_override,
