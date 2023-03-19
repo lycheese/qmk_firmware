@@ -29,7 +29,7 @@ enum layers {
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 /*
- * Bone layer
+ * Qwertz layer
  *
  * ,-------------------------------------------.                              ,-------------------------------------------.
  * |        |   J  |   D  |   U  |   A  |   X  |                              |   P  |   H  |   L  |   M  |   W  |  ẞ     |
@@ -43,9 +43,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  *                        `----------------------------------'  `----------------------------------'
  */
     [_QWERTY] = LAYOUT(
-      XXXXXXX,          KC_J,           KC_D,           KC_U,            KC_A,           KC_X,                                                                                               KC_P,    KC_H,         KC_L,         KC_M,         KC_W,            RALT(KC_S),
-      XXXXXXX,          LGUI_T(KC_C),   LALT_T(KC_T),   LCTL_T(KC_I),    LSFT_T(KC_E),   KC_O,                                                                                               KC_B,    RSFT_T(KC_N), RCTL_T(KC_R), LALT_T(KC_S), RGUI_T(KC_G),    KC_Q,
-      XXXXXXX,          KC_F,           KC_V,           RALT(KC_U),      RALT(KC_A),     RALT(KC_O),       TG(_GAME),     KC_SLCK,                                KC_LSFT, XXXXXXX,          KC_Y,    KC_Z,         KC_COMM,      KC_DOT,       KC_K,            XXXXXXX,
+      XXXXXXX,          KC_Q,           KC_W,           KC_E,            KC_R,           KC_T,                                                                                               KC_Z,    KC_U,         KC_I,         KC_O,         KC_P,            KC_LBRC,
+      XXXXXXX,          LGUI_T(KC_A),   LALT_T(KC_S),   LCTL_T(KC_D),    LSFT_T(KC_F),   KC_G,                                                                                               KC_H,    RSFT_T(KC_J), RCTL_T(KC_K), LALT_T(KC_L), RGUI_T(KC_SCLN),    KC_QUOT,
+      XXXXXXX,          KC_Y,           KC_X,           KC_C,            KC_V,           KC_B,       TG(_GAME),     KC_SLCK,                                KC_LSFT, XXXXXXX,          KC_N,    KC_M,         KC_COMM,      KC_DOT,       KC_MINS,            XXXXXXX,
                                                         XXXXXXX, LT(_MEDIA, KC_ESC), LT(_NAV, KC_SPC), LT(_SYMR, KC_TAB), XXXXXXX,                                XXXXXXX, LT(_SYM, KC_ENT), LT(_NUM, KC_BSPC),     LT(_FUN, KC_DEL),       XXXXXXX
     ),
 
@@ -59,15 +59,15 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |--------+------+------+------+------+------+-------------.  ,-------------+------+------+------+------+------+--------|
  * | b      | Tab  |  z   |  x   |  c   |  v   | QWER |      |  |      |      |   n  |  m   |  ,   |  .   |      |        |
  * `----------------------+------+------+------+------+------|  |------+------+------+------+------+----------------------'
- *                        | RAIS | RAIS | RAIS | RAIS | SPC  |  |      |      |      |      |      |
+ *                        | RAIS | RAIS | RAIS | RAIS | SPC  |  |  ENT |      |      |      |      |
  *                        | (c+a)| (alt)| (ctl)|      |      |  |      |      |      |      |      |
  *                        `----------------------------------'  `----------------------------------'
  */
     [_GAME] = LAYOUT(
       KC_T,    KC_ESC,  KC_Q,    KC_W,                            KC_E,                 KC_R,                                                         KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    _______,
-      KC_G,    KC_LSFT, KC_A,    KC_S,                            KC_D,                 KC_F,                                                         KC_H,    KC_J,    KC_K,    KC_I,    _______, _______,
-      KC_B,    KC_TAB,  KC_Z,    KC_X,                            KC_C,                 KC_V,                 _______,     _______, _______, _______, KC_N,    KC_M,    KC_COMM, KC_DOT,  _______, _______,
-                                 LM(_NUM, MOD_LCTL | MOD_LALT), LM(_NUM, MOD_LALT), LM(_NUM, MOD_LCTL), MO(_NUM),  KC_SPC,  _______, _______, _______, _______, _______
+      KC_G,    KC_LSFT, KC_A,    KC_S,                            KC_D,                 KC_F,                                                         KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT,
+      KC_B,    KC_TAB,  KC_Z,    KC_X,                            KC_C,                 KC_V,                 _______,     _______, _______, _______, KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_MINS, _______,
+                                 LM(_NUM, MOD_LCTL | MOD_LALT),   LM(_NUM, MOD_LALT),   LM(_NUM, MOD_LCTL),   MO(_NUM),    KC_SPC,  _______, KC_ENT,  KC_BSPC, KC_DEL,  _______
     ),
 /*
  * Number layer
@@ -224,7 +224,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 #ifdef OLED_DRIVER_ENABLE
 oled_rotation_t oled_init_user(oled_rotation_t rotation) {
-	return OLED_ROTATION_180;
+        return OLED_ROTATION_180;
 }
 
 static void render_kyria_logo(void) {
