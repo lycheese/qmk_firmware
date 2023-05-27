@@ -275,3 +275,26 @@ const key_override_t **key_overrides = (const key_override_t *[]){
 layer_state_t layer_state_set_user(layer_state_t state) {
   return update_tri_layer_state(state, _MEDIA, _FUN, _SYS);
 }
+
+/* bool get_custom_auto_shifted_key(uint16_t keycode, keyrecord_t *record) { */
+/*   switch(keycode) { */
+/*     case HRM_H: */
+/*       return true; */
+/*     case HRM_I: */
+/*       return true; */
+/*     case HRM_E: */
+/*       return true; */
+/*     case HRM_A: */
+/*       return true; */
+/*     case HRM_T: */
+/*       return true; */
+/*     case HRM_R: */
+/*       return true; */
+/*     case HRM_N: */
+/*       return true; */
+/*     case HRM_S: */
+/*       return true; */
+/*     default: */
+/*       return false; */
+/*   } */
+/* } */
