@@ -8,6 +8,7 @@ enum planck_layers {
   _SYML,
   _MEDIA,
   _FUN,
+  _SYS,
 };
 
 //#define LSFT LT(KC_RSFT, KC_A) // Switches to the shift layer for the right side on hold.
@@ -31,6 +32,11 @@ enum planck_layers {
 
 enum macro_keycodes {
   DIA = SAFE_RANGE, // Diacritics key, NO-OP by default
+  REISUB,
+  SYS1,
+  SYS2,
+  SYS3,
+  SYS4,
 };
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -91,16 +97,23 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,    KC_NO,    KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,
     KC_LGUI, KC_LALT, KC_LCTL, KC_LSFT, KC_NO,   KC_NO,    KC_NO,    KC_NO,   KC_NO,   KC_VOLD, KC_VOLU, KC_NO,
     KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,    KC_NO,    KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,
-    KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,    KC_NO,    KC_NO,   KC_MUTE, KC_NO,   KC_NO,   KC_NO
+    KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,    KC_NO,    KC_NO,   KC_MUTE, MO(_FUN),KC_NO,   KC_NO
 ),
 
 [_FUN] = LAYOUT_planck_grid(
     KC_F12,  KC_F7,   KC_F8,   KC_F9,   KC_PSCR,  KC_NO,    KC_NO,    KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,
     KC_F11,  KC_F4,   KC_F5,   KC_F6,   KC_SLCK,  KC_NO,    KC_NO,    KC_NO,   KC_LSFT, KC_RCTL, KC_LALT, KC_LGUI,
     KC_F10,  KC_F1,   KC_F2,   KC_F3,   KC_PAUS,  KC_NO,    KC_NO,    KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,
-    KC_NO,   KC_NO,   KC_NO,   KC_0,    KC_NO,    KC_NO,    KC_NO,    KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO
+    KC_NO,   KC_NO,   MO(_MEDIA),KC_NO, KC_NO,    KC_NO,    KC_NO,    KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO
 ),
 
+[_SYS] = LAYOUT_planck_grid(
+    KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,    KC_NO,    KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,
+    KC_NO,   KC_NO,   SYS1,    SYS2,    KC_NO,   KC_NO,    KC_NO,    KC_NO,   SYS3,    SYS4,    KC_NO,   KC_NO,
+    KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,    KC_NO,    KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,
+    KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,    KC_NO,    KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO
+
+),
 
 /* Vorlage
  *
@@ -207,6 +220,25 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         dia_key = 0;
       }
       return false;
+    case REISUB:
+      if (record->event.pressed) {
+        SEND_STRING(SS_DOWN(X_LALT)
+                    SS_DOWN(X_SYRQ)
+                    "r"
+                    SS_DELAY(1000)
+                    "e"
+                    SS_DELAY(1000)
+                    "i"
+                    SS_DELAY(1000)
+                    "s"
+                    SS_DELAY(1000)
+                    "u"
+                    SS_DELAY(1000)
+                    "b"
+                    SS_UP(X_SYRQ)
+                    SS_UP(X_LALT));
+      }
+      return false;
     default:
       if (record->event.pressed) {
         dia_key = 0;
@@ -219,12 +251,14 @@ const uint16_t PROGMEM test_combo1[] = {HRM_A, HRM_T, COMBO_END};
 const uint16_t PROGMEM test_combo2[] = {HRM_E, HRM_R, COMBO_END};
 const uint16_t PROGMEM test_combo3[] = {HRM_I, HRM_N, COMBO_END};
 const uint16_t PROGMEM test_combo7[] = {HRM_H, HRM_S, COMBO_END};
+const uint16_t PROGMEM reisub_combo[] = {SYS1, SYS2, SYS3, SYS4, COMBO_END};
 
 combo_t key_combos[COMBO_COUNT] = {
   COMBO(test_combo1, OSM(MOD_LSFT)),
   COMBO(test_combo2, OSM(MOD_LCTL)),
   COMBO(test_combo3, OSM(MOD_LALT)),
   COMBO(test_combo7, CAPS_WORD),
+  COMBO(reisub_combo, REISUB)
 };
 
 const key_override_t german_dot_override = ko_make_basic(MOD_MASK_SHIFT, KC_DOT, KC_COLN);
@@ -235,3 +269,7 @@ const key_override_t **key_overrides = (const key_override_t *[]){
     &german_comm_override,
     NULL // Null terminate the array of overrides!
 };
+
+layer_state_t layer_state_set_user(layer_state_t state) {
+  return update_tri_layer_state(state, _MEDIA, _FUN, _SYS);
+}
