@@ -23,7 +23,18 @@ enum layers {
     _FUN,
     _NAV,
     _MEDIA,
-    _SYMR
+    _SYMR,
+    _HB,    // gaming hotbar layer (held from _GAME)
+    _MENU   // gaming menu layer (one-shot from _HB)
+};
+
+// Latching modifiers for the hotbar layer: tap once while _HB is held and the
+// modifier stays active until _HB is released (see process_record_user and
+// layer_state_set_user below).
+enum custom_keycodes {
+    LATCH_CTL = SAFE_RANGE,
+    LATCH_ALT,
+    LATCH_CA
 };
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -49,24 +60,24 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     ),
 
 /*
- * Lower Layer: Gaming
+ * Gaming layer (Voyager simulation: only 2 thumb keys on the left)
  *
  * ,-------------------------------------------.                              ,-------------------------------------------.
- * | t      | Esc  |  q   |  w   |  e   |  r   |                              |   y  |  u   |  i   |  o   |  o   |        |
+ * | t      | Esc  |  q   |  w   |  e   |  r   |                              |   y  |  u   |  i   |  o   |  p   |        |
  * |--------+------+------+------+------+------|                              |------+------+------+------+------+--------|
  * | g      |LShift|  a   |  s   |  d   |  f   |                              |   h  |  j   |  k   |  l   |      |        |
  * |--------+------+------+------+------+------+-------------.  ,-------------+------+------+------+------+------+--------|
- * | b      | Tab  |  z   |  x   |  c   |  v   | QWER |      |  |      |      |   n  |  m   |  ,   |  .   |      |        |
+ * | b      | Tab  |  z   |  x   |  c   |  v   | GAME |      |  |      |      |   n  |  m   |  ,   |  .   |      |        |
  * `----------------------+------+------+------+------+------|  |------+------+------+------+------+----------------------'
- *                        | RAIS | RAIS | RAIS | RAIS | SPC  |  |      |      |      |      |      |
- *                        | (c+a)| (alt)| (ctl)|      |      |  |      |      |      |      |      |
+ *                        |      |      |      |  HB  | SPC  |  |      |      |      |      |      |
+ *                        |      |      |      |      |      |  |      |      |      |      |      |
  *                        `----------------------------------'  `----------------------------------'
  */
     [_GAME] = LAYOUT(
-      KC_T,    KC_ESC,  KC_Q,    KC_W,                            KC_E,                 KC_R,                                                         KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    _______,
-      KC_G,    KC_LSFT, KC_A,    KC_S,                            KC_D,                 KC_F,                                                         KC_H,    KC_J,    KC_K,    KC_I,    _______, _______,
-      KC_B,    KC_TAB,  KC_Z,    KC_X,                            KC_C,                 KC_V,                 _______,     _______, _______, _______, KC_N,    KC_M,    KC_COMM, KC_DOT,  _______, _______,
-                                 LM(_NUM, MOD_LCTL | MOD_LALT), LM(_NUM, MOD_LALT), LM(_NUM, MOD_LCTL), MO(_NUM),  KC_SPC,  _______, _______, _______, _______, _______
+      KC_T,    KC_ESC,  KC_Q,    KC_W,    KC_E,    KC_R,                                        KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    _______,
+      KC_G,    KC_LSFT, KC_A,    KC_S,    KC_D,    KC_F,                                        KC_H,    KC_J,    KC_K,    KC_L,    _______, _______,
+      KC_B,    KC_TAB,  KC_Z,    KC_X,    KC_C,    KC_V,    _______, _______, _______, _______, KC_N,    KC_M,    KC_COMM, KC_DOT,  _______, _______,
+                                 XXXXXXX, XXXXXXX, XXXXXXX, MO(_HB), KC_SPC,  _______, _______, _______, _______, _______
     ),
 /*
  * Number layer
@@ -195,6 +206,56 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                  XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX
     ),
 
+/*
+ * Hotbar layer (held via HB on the gaming layer)
+ *
+ * Alt*, Ctrl* and C+A* latch: tap once and the modifier stays active for all
+ * following hotbar presses until HB is released. Tapping another latch key
+ * switches to it, tapping the same one again returns to the plain bar.
+ * MENU is a one-shot menu layer.
+ *
+ * ,-------------------------------------------.                              ,-------------------------------------------.
+ * | MENU   | Alt* |  7   |  8   |  9   |  -   |                              |      |      |      |      |      |        |
+ * |--------+------+------+------+------+------|                              |------+------+------+------+------+--------|
+ * | C+A*   |LShift|  4   |  5   |  6   |  0   |                              |      |      |      |      |      |        |
+ * |--------+------+------+------+------+------+-------------.  ,-------------+------+------+------+------+------+--------|
+ * |        | Ctrl*|  1   |  2   |  3   |  =   |      |      |  |      |      |      |      |      |      |      |        |
+ * `----------------------+------+------+------+------+------|  |------+------+------+------+------+----------------------'
+ *                        |      |      |      | (HB) | SPC  |  |      |      |      |      |      |
+ *                        |      |      |      |      |      |  |      |      |      |      |      |
+ *                        `----------------------------------'  `----------------------------------'
+ */
+    [_HB] = LAYOUT(
+      OSL(_MENU), LATCH_ALT, KC_7, KC_8,    KC_9,    KC_MINS,                                     _______, _______, _______, _______, _______, _______,
+      LATCH_CA,   KC_LSFT,   KC_4, KC_5,    KC_6,    KC_0,                                        _______, _______, _______, _______, _______, _______,
+      XXXXXXX,    LATCH_CTL, KC_1, KC_2,    KC_3,    KC_EQL,  XXXXXXX, XXXXXXX, _______, _______, _______, _______, _______, _______, _______, _______,
+                                   XXXXXXX, XXXXXXX, XXXXXXX, _______, _______, _______, _______, _______, _______, _______
+    ),
+
+/*
+ * Menu layer (one-shot from the hotbar layer)
+ *
+ * Each left-hand key sends the right-hand key of the same finger, so game
+ * menus bound to right-hand keys are reachable without leaving the mouse.
+ *
+ * ,-------------------------------------------.                              ,-------------------------------------------.
+ * | Esc    |  p   |  o   |  i   |  u   |  y   |                              |      |      |      |      |      |        |
+ * |--------+------+------+------+------+------|                              |------+------+------+------+------+--------|
+ * |        |  ;   |  l   |  k   |  j   |  h   |                              |      |      |      |      |      |        |
+ * |--------+------+------+------+------+------+-------------.  ,-------------+------+------+------+------+------+--------|
+ * |        |  /   |  .   |  ,   |  m   |  n   |      |      |  |      |      |      |      |      |      |      |        |
+ * `----------------------+------+------+------+------+------|  |------+------+------+------+------+----------------------'
+ *                        |      |      |      |      | SPC  |  |      |      |      |      |      |
+ *                        |      |      |      |      |      |  |      |      |      |      |      |
+ *                        `----------------------------------'  `----------------------------------'
+ */
+    [_MENU] = LAYOUT(
+      KC_ESC,  KC_P,    KC_O,    KC_I,    KC_U,    KC_Y,                                        _______, _______, _______, _______, _______, _______,
+      XXXXXXX, KC_SCLN, KC_L,    KC_K,    KC_J,    KC_H,                                        _______, _______, _______, _______, _______, _______,
+      XXXXXXX, KC_SLSH, KC_DOT,  KC_COMM, KC_M,    KC_N,    XXXXXXX, XXXXXXX, _______, _______, _______, _______, _______, _______, _______, _______,
+                                 XXXXXXX, XXXXXXX, XXXXXXX, _______, _______, _______, _______, _______, _______, _______
+    ),
+
 // /*
 //  * Layer template
 //  *
@@ -217,7 +278,49 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 //     ),
 };
 
-/* layer_state_t layer_state_set_user(layer_state_t state) { */
-/*     return update_tri_layer_state(state, _LOWER, _RAISE, _ADJUST); */
-/* } */
+// Modifiers currently latched on the hotbar layer (8-bit mod mask).
+static uint8_t latched_mods = 0;
+
+static void clear_latch(void) {
+    if (latched_mods) {
+        unregister_mods(latched_mods);
+        latched_mods = 0;
+    }
+}
+
+// Latch `mods`; latching the same mods again clears the latch.
+static void toggle_latch(uint8_t mods) {
+    bool same = (latched_mods == mods);
+    clear_latch();
+    if (!same) {
+        latched_mods = mods;
+        register_mods(latched_mods);
+    }
+}
+
+bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+    if (!record->event.pressed) {
+        return true;
+    }
+    switch (keycode) {
+        case LATCH_CTL:
+            toggle_latch(MOD_BIT(KC_LCTL));
+            return false;
+        case LATCH_ALT:
+            toggle_latch(MOD_BIT(KC_LALT));
+            return false;
+        case LATCH_CA:
+            toggle_latch(MOD_BIT(KC_LCTL) | MOD_BIT(KC_LALT));
+            return false;
+    }
+    return true;
+}
+
+// Releasing HB (leaving the hotbar layer) releases any latched modifier.
+layer_state_t layer_state_set_user(layer_state_t state) {
+    if (!layer_state_cmp(state, _HB)) {
+        clear_latch();
+    }
+    return state;
+}
 
